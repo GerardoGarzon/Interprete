@@ -35,31 +35,36 @@ void destruirNodo( Nodo* nodo ) {
       free(nodo);
 }
 
-void insertarNodo( Lista* lista, Variable* variable ) {
+int insertarNodo( Lista* lista, Variable* variable ) {
       Nodo* nodo = crearNodo(variable);
-      
-      if( lista -> inicio == NULL ) {
-            lista -> inicio = nodo;
+
+      if (varExiste(variable, lista) == 1) {
+            return 0;
       } else {
-            Nodo* nodoTmp = lista -> inicio;
-            
-            while(nodoTmp -> siguiente) {
-                  nodoTmp = lista -> inicio;
+            if( lista -> inicio == NULL ) {
+                  lista -> inicio = nodo;
+            } else {
+                  Nodo* nodoTmp = lista -> inicio;
+                  
+                  while(nodoTmp -> siguiente != NULL) {
+                        nodoTmp = nodoTmp -> siguiente;
+                  }
+                  nodoTmp -> siguiente = nodo;
             }
-            nodoTmp -> siguiente = nodo;
+            return 1;
       }
 }
 
-Variable* varExiste( Variable variable , Lista* lista ) {
+int varExiste( Variable* variable , Lista* lista ) {
       Nodo* nodoTmp = lista -> inicio;
 
       while( nodoTmp != NULL ) {
-            if ( strcmp(nodoTmp -> variable.nombre, variable.nombre) ) {
-                  return &nodoTmp -> variable;
+            if ( strcmp(nodoTmp -> variable.nombre, variable -> nombre) == 0 ) {
+                  return 1;
             } else {
                   nodoTmp = nodoTmp -> siguiente;
             }
       }
 
-      return NULL;
+      return 0;
 }

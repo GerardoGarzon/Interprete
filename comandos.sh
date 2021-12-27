@@ -1,6 +1,6 @@
 rm -r calculadora.tab.c calculadora.tab.h lex.yy.c salida
 flex lexemas.l
 bison calculadora.y -d
-gcc -o salida calculadora.tab.c lex.yy.c -lm
+gcc -o salida calculadora.tab.c lex.yy.c lista.c -lm
 clear
 ./salida

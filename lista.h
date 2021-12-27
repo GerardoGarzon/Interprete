@@ -29,5 +29,12 @@ typedef struct Lista{
       Nodo* inicio;
 } Lista;
 
+Nodo* crearNodo( Variable* variable );
+
+void destruirNodo( Nodo* nodo );
+
+int insertarNodo( Lista* lista, Variable* variable );
+
+int varExiste( Variable* variable , Lista* lista );
 
 #endif

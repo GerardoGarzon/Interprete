@@ -1,5 +1,6 @@
 %{
       #include <stdio.h>
+      #include <string.h>
       #include "calculadora.tab.h"
 %}
 
@@ -10,40 +11,50 @@ SIGNOS      [+]|[-]|[*]|[\/]|[,]|[%]
 POT         Pow|pow
 VARIABLES   (int|double|string)
 NOMBRE      ([a-z]+[_a-zA-Z0-9]*)
+SALIDA      exit|finish|end
 
 OPERACIONES {SIGNOS}{1}
 
 %%
 
-{OPERACIONES}     {
-                        return(yytext[0]);
-                  }
+{SALIDA}        {
+                    exit(0);
+                }
 
-{NUMEROS}         {
-                        yylval.entero = atoi(yytext);
-                        return ENTERO;
-                  }
+{OPERACIONES}   {
+                    return(yytext[0]);
+                }
 
-{POT}             {
-                        return POTENCIA;
-                  }
+{NUMEROS}       {
+                    yylval.entero = atoi(yytext);
+                    return ENTERO;
+                }
 
-{DECIMALES}       {
-                        yylval.entero = atof(yytext);
-                        return ENTERO;
-                  }
+{POT}           {
+                    return POTENCIA;
+                }
 
-{VARIABLES}       {
-                        yylval.tipo = strdup(yytext);
-                        return VARIABLE;
-                  }
+{DECIMALES}     {
+                    yylval.entero = atof(yytext);
+                    return ENTERO;
+                }
 
-{NOMBRE}          {
-                        yylval.nombre = strdup(yytext);
-                        return VAR_NOMBRE;
-                  }
+{VARIABLES}     {
+                    if(strcmp(yytext, "int") == 0) {
+                        return VARIABLE_INT;
+                    } else if(strcmp(yytext, "double") == 0) {
+                        return VARIABLE_DOUBLE;
+                    } else if(strcmp(yytext, "string") == 0) {
+                        return VARIABLE_STRING;
+                    }
+                }
 
-.                 {}
+{NOMBRE}        {
+                    yylval.nombre = strdup(yytext);
+                    return VAR_NOMBRE;
+                }
+
+.               {}
 
 "\n"  {
             return(yytext[0]);
