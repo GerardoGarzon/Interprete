@@ -38,11 +38,12 @@ void destruirNodo( Nodo* nodo ) {
 int insertarNodo( Lista* lista, Variable* variable ) {
       Nodo* nodo = crearNodo(variable);
 
-      if (varExiste(variable, lista) == 1) {
-            return 0;
+      if( lista -> inicio == NULL ) {
+            lista -> inicio = nodo;
+            return 1;
       } else {
-            if( lista -> inicio == NULL ) {
-                  lista -> inicio = nodo;
+            if (varExiste(variable, lista) == 1) {
+                  return 0;
             } else {
                   Nodo* nodoTmp = lista -> inicio;
                   
@@ -50,21 +51,67 @@ int insertarNodo( Lista* lista, Variable* variable ) {
                         nodoTmp = nodoTmp -> siguiente;
                   }
                   nodoTmp -> siguiente = nodo;
-            }
-            return 1;
+                  return 1;
+            }      
       }
 }
 
 int varExiste( Variable* variable , Lista* lista ) {
-      Nodo* nodoTmp = lista -> inicio;
+      if(lista -> inicio != NULL) {
+            Nodo* nodoTmp = lista -> inicio;
 
-      while( nodoTmp != NULL ) {
-            if ( strcmp(nodoTmp -> variable.nombre, variable -> nombre) == 0 ) {
-                  return 1;
-            } else {
-                  nodoTmp = nodoTmp -> siguiente;
+            while( nodoTmp != NULL ) {
+                  if ( strcmp(nodoTmp -> variable.nombre, variable -> nombre) == 0 ) {
+                        return 1;
+                  } else {
+                        nodoTmp = nodoTmp -> siguiente;
+                  }
             }
+      } else {
+            return 0;
       }
 
       return 0;
+}
+
+Variable obtenerVariable(Variable* variable, Lista* lista) {
+      if(lista -> inicio != NULL) {
+            Nodo* nodoTmp = lista -> inicio;
+
+            while( nodoTmp != NULL ) {
+                  if ( strcmp(nodoTmp -> variable.nombre, variable -> nombre) == 0 ) {
+                        return nodoTmp -> variable;
+                  } else {
+                        nodoTmp = nodoTmp -> siguiente;
+                  }
+            }
+      }
+}
+
+void modificarVariable(Variable* destino, Variable* modificacion, Lista* lista) {
+      if(lista -> inicio != NULL) {
+            Nodo* nodoTmp = lista -> inicio;
+
+            while( nodoTmp != NULL ) {
+                  if ( strcmp(nodoTmp -> variable.nombre, destino -> nombre) == 0 ) {
+                        switch( destino -> tipo ) {
+                              case 0:
+                                    nodoTmp -> variable.valor_int = modificacion -> valor_double;
+                                    printf("Nuevo valor %s = %d\n", destino -> nombre, nodoTmp -> variable.valor_int);
+                                    break;
+                              case 1:
+                                    nodoTmp -> variable.valor_double = modificacion -> valor_double;
+                                    printf("Nuevo valor %s = %f\n", destino -> nombre, nodoTmp -> variable.valor_double);
+                                    break;
+                              case 2:
+                                    strncpy(nodoTmp -> variable.valor_string, modificacion -> valor_string, 100);
+                                    printf("Nuevo valor %s = %s\n", destino -> nombre, nodoTmp -> variable.valor_string);
+                                    break;
+                        }
+                        break;
+                  } else {
+                        nodoTmp = nodoTmp -> siguiente;
+                  }
+            }
+      }
 }

@@ -37,4 +37,8 @@ int insertarNodo( Lista* lista, Variable* variable );
 
 int varExiste( Variable* variable , Lista* lista );
 
+Variable obtenerVariable(Variable* variable, Lista* lista);
+
+void modificarVariable(Variable* destino, Variable* modificacion, Lista* lista);
+
 #endif
